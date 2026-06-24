@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Activity Logs</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #fff0f5;
+    margin:0;
+    padding:15px;
+    color:#333;
+}
+
+.container {
+    max-width: 1000px;
+    margin:0 auto;
+}
+
+h1 { margin-bottom:5px; }
+.subtitle { margin-bottom:20px; }
+
+.stats-box {
+    background:#ffe6f2;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+.stats-box p {
+    margin:5px 0;
+    font-weight:bold;
+}
+
+.chart-container {
+    background:#ffe6f2;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:30px;
+}
+
+canvas {
+    width:100%;
+    height:400px;
+}
+
+table {
+    width:100%;
+    border-collapse: collapse;
+    margin-bottom:30px;
+}
+
+th, td {
+    border:1px solid #ffb3d1;
+    padding:8px;
+    text-align:center;
+}
+
+th {
+    background:#ff66a3;
+    color:#fff;
+}
+
+.back-link {
+    display:inline-block;
+    margin-top:15px;
+    color:#ff4da6;
+    text-decoration:none;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Activity Logs</h1>
+
+<select id="periodSelect">
+    <option value="daily">Last 7 Days</option>
+    <option value="monthly">Last 6 Months</option>
+</select>
+
+<p id="subtitle" class="subtitle">System activity overview</p>
+
+<div class="stats-box">
+    <p>Total Users: <span id="totalUsers">0</span></p>
+    <p>Total Orders: <span id="totalOrders">0</span></p>
+    <p>Total Sales: <span id="totalSales">0</span></p>
+</div>
+
+<div class="chart-container">
+    <h3>New Users</h3>
+    <canvas id="usersChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h3>Orders</h3>
+    <canvas id="ordersChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h3>Items Added</h3>
+    <canvas id="itemsChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h3>Low Stock Items (≤10 units)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody id="lowStockBody"></tbody>
+    </table>
+</div>
+
+<h3>Activity Table</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Period</th>
+            <th>Users</th>
+            <th>Orders</th>
+        </tr>
+    </thead>
+    <tbody id="activityBody"></tbody>
+</table>
+
+<a href="{% url 'settings' %}" class="back-link">&larr; Back to Settings</a>
+
+</div>
+
+{{ daily_labels|json_script:"daily-labels" }}
+{{ daily_user_counts|json_script:"daily-users" }}
+{{ daily_order_counts|json_script:"daily-orders" }}
+{{ daily_item_counts|json_script:"daily-items" }}
+{{ daily_sales|json_script:"daily-sales" }}
+
+{{ monthly_labels|json_script:"monthly-labels" }}
+{{ monthly_user_counts|json_script:"monthly-users" }}
+{{ monthly_order_counts|json_script:"monthly-orders" }}
+{{ monthly_item_counts|json_script:"monthly-items" }}
+{{ monthly_sales|json_script:"monthly-sales" }}
+
+{{ low_stock_list|json_script:"low-stock" }}
+
+<script>
+function getData(id) {
+    try {
+        return JSON.parse(document.getElementById(id).textContent);
+    } catch {
+        return [];
+    }
+}
+
+function toNumber(val) {
+    return Number(val) || 0;
+}
+
+function formatKES(value) {
+    return "KSh " + toNumber(value).toLocaleString();
+}
+
+const activityData = {
+    daily: {
+        labels: getData("daily-labels"),
+        users: getData("daily-users"),
+        orders: getData("daily-orders"),
+        items: getData("daily-items"),
+        sales: getData("daily-sales")
+    },
+    monthly: {
+        labels: getData("monthly-labels"),
+        users: getData("monthly-users"),
+        orders: getData("monthly-orders"),
+        items: getData("monthly-items"),
+        sales: getData("monthly-sales")
+    },
+    lowStock: getData("low-stock")
+};
+
+const usersChart = new Chart(document.getElementById('usersChart'), {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'New Users',
+            data: [],
+            backgroundColor: '#ff4da6'
+        }]
+    }
+});
+
+const ordersChart = new Chart(document.getElementById('ordersChart'), {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Orders',
+            data: [],
+            backgroundColor: '#ff66a3'
+        }]
+    }
+});
+
+const itemsChart = new Chart(document.getElementById('itemsChart'), {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Items Added',
+            data: [],
+            backgroundColor: '#ff99cc'
+        }]
+    }
+});
+
+function updateTable(labels, users, orders) {
+    const tbody = document.getElementById("activityBody");
+    tbody.innerHTML = "";
+
+    for (let i = 0; i < labels.length; i++) {
+        tbody.innerHTML += `
+            <tr>
+                <td>${labels[i]}</td>
+                <td>${users[i] || 0}</td>
+                <td>${orders[i] || 0}</td>
+            </tr>
+        `;
+    }
+}
+
+function updateLowStock(data) {
+    const tbody = document.getElementById("lowStockBody");
+    tbody.innerHTML = "";
+
+    data.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+            </tr>
+        `;
+    });
+}
+
+function updateDashboard(period) {
+    const data = activityData[period];
+
+    usersChart.data.labels = data.labels;
+    usersChart.data.datasets[0].data = data.users;
+    usersChart.update();
+
+    ordersChart.data.labels = data.labels;
+    ordersChart.data.datasets[0].data = data.orders;
+    ordersChart.update();
+
+    itemsChart.data.labels = data.labels;
+    itemsChart.data.datasets[0].data = data.items;
+    itemsChart.update();
+
+    updateTable(data.labels, data.users, data.orders);
+    updateLowStock(activityData.lowStock);
+
+    const totalUsers = data.users.reduce((a, b) => a + toNumber(b), 0);
+    const totalOrders = data.orders.reduce((a, b) => a + toNumber(b), 0);
+    const totalSales = data.sales.reduce((a, b) => a + toNumber(b), 0);
+
+    document.getElementById("totalUsers").textContent = totalUsers;
+    document.getElementById("totalOrders").textContent = totalOrders;
+    document.getElementById("totalSales").textContent = formatKES(totalSales);
+
+    document.getElementById("subtitle").textContent =
+        period === "daily"
+            ? "System activity overview (Last 7 Days)"
+            : "System activity overview (Last 6 Months)";
+}
+
+updateDashboard("daily");
+
+document.getElementById("periodSelect").addEventListener("change", function () {
+    updateDashboard(this.value);
+});
+</script>
+
+</body>
+</html>

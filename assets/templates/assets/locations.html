@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Locations</title>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#fff0f5;
+}
+
+.sidebar{
+    width:200px;
+    background:#ff66b2;
+    padding:20px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    font-size:1.8rem;
+    font-weight:bold;
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.menu{
+    list-style:none;
+    flex-grow:1;
+    margin-top:20px;
+}
+
+.menu li{
+    margin-bottom:15px;
+}
+
+.menu li a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    padding:10px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.menu li a:hover,
+.menu li a.active{
+    background:#ff3399;
+}
+
+.menu li a i{
+    margin-right:10px;
+    width:18px;
+    text-align:center;
+}
+
+.logout{
+    margin-top:auto;
+}
+
+.logout a{
+    display:flex;
+    align-items:center;
+    padding:10px;
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    border-radius:8px;
+}
+
+.logout a:hover{
+    background:#ff3399;
+}
+
+.logout a i{
+    margin-right:10px;
+    width:18px;
+}
+
+.main-content{
+    flex:1;
+    padding:30px;
+}
+
+h1{
+    font-size:2rem;
+    margin-bottom:20px;
+    color:#ff3399;
+}
+
+.table-container{
+    overflow-x:auto;
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:30px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#ff66b2;
+    color:white;
+}
+
+th,td{
+    padding:12px 15px;
+    text-align:left;
+}
+
+tbody tr:nth-child(even){
+    background:#ffe6f0;
+}
+
+tbody tr:hover{
+    background:#ffb3d1;
+}
+
+.form-box{
+    background:white;
+    padding:20px;
+    margin-top:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    max-width:500px;
+}
+form select,
+form input{
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+    width:100%;
+}
+.form-box form button{
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+    width:100%;
+    background:#ff3399;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+    line-height:1;
+    transition:0.2s;
+}
+
+.form-box form button:hover{
+    background:#e60073;
+}
+.action-btn{
+    padding:6px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    transition:0.2s;
+    font-size:14px;
+    line-height:1;
+    margin-right:5px;
+}
+
+.btn-delete{
+    background:#ff3399;
+}
+.btn-delete:hover{
+    background:#e60073;
+}
+
+.btn-update{
+    background:#ff3399;
+}
+.btn-update:hover{
+    background:#e60073;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+.modal-box{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    width:300px;
+}
+.modal-actions{
+    margin-top:15px;
+    display:flex;
+    justify-content:space-between;
+}
+.confirm-btn{
+    background:#ff1a75;
+    color:white;
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+.cancel-btn{
+    background:#ccc;
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+    <h2 class="logo">Inventory & Sales Tracking System</h2>
+
+    <ul class="menu">
+        <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="{% url 'categories' %}"><i class="fas fa-th-large"></i> Categories</a></li>
+        <li><a href="{% url 'suppliers' %}"><i class="fas fa-truck"></i> Suppliers</a></li>
+        <li><a href="{% url 'locations' %}" class="active"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
+        <li><a href="{% url 'items' %}"><i class="fas fa-box"></i> Items</a></li>
+        <li><a href="{% url 'orders' %}"><i class="fa fa-list"></i> All Orders</a></li>
+        <li><a href="{% url 'settings' %}"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="{% url 'change_password' %}"><i class="fas fa-key"></i> Change Password</a></li>
+    </ul>
+
+    <div class="logout">
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+</aside>
+
+<main class="main-content">
+<h1>Locations</h1>
+<div class="table-container">
+<h2>All Locations</h2>
+<table>
+<thead>
+<tr>
+    <th>ID</th>
+    <th>County</th>
+    <th>Branch</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+{% for location in locations %}
+<tr>
+<td>{{ location.id }}</td>
+<td>
+    {% if location.county %}
+        {{ location.county.name }}
+    {% else %}
+        -
+    {% endif %}
+</td>
+<td>{{ location.branch_name|default:"-" }}</td>
+<td>
+    <form method="POST"
+          action="{% url 'location_delete' location.id %}"
+          style="display:inline;">
+
+        {% csrf_token %}
+
+        <button type="button"
+                class="action-btn btn-delete"
+                onclick="openModal(this.form)">
+            Delete
+        </button>
+    </form>
+    <a href="{% url 'edit_location' location.id %}">
+        <button type="button" class="action-btn btn-update">
+            Update
+        </button>
+    </a>
+</td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4" style="text-align:center; padding:15px;">
+        No locations available.
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class="form-box">
+<h2>Add Location</h2>
+{% if error %}
+    <p style="color:red;">{{ error }}</p>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+
+    <select name="county" required>
+        <option value="">-- Select County --</option>
+        {% for county in counties %}
+            <option value="{{ county.id }}">{{ county.name }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="branch_name" placeholder="Branch Name (e.g Warehouse A)" required>
+
+    <button class="btn" type="submit">Add Location</button>
+</form>
+</div>
+</main>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-box">
+        <h3>Delete Location?</h3>
+        <p>This action cannot be undone.</p>
+
+        <div class="modal-actions">
+            <button class="confirm-btn" onclick="submitDelete()">Yes Delete</button>
+            <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+<script>
+let activeForm = null;
+
+function openModal(form) {
+    activeForm = form;
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+function closeModal() {
+    activeForm = null;
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+function submitDelete() {
+    if (activeForm) {
+        activeForm.submit();
+    }
+}
+</script>
+</body>
+</html>

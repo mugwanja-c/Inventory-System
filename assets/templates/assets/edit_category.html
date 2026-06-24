@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Category</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background:#fff0f5;
+    margin:0;
+    padding:30px;
+}
+
+.container {
+    background:white;
+    padding:25px;
+    max-width:400px;
+    margin:auto;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color:#ff3399;
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+button {
+    padding:10px 15px;
+    background:#ff3399;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover {
+    background:#e60073;
+}
+
+a {
+    margin-left:10px;
+    text-decoration:none;
+    color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Edit Category</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" value="{{ category.name }}" required>
+
+        <button type="submit">Update</button>
+        <a href="{% url 'categories' %}">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

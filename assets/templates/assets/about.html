@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>About</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #fff0f5, #ffe6f0);
+    padding: 40px;
+}
+.container {
+    background: white;
+    padding: 30px;
+    max-width: 750px;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+h2 {
+    color: #ff3399;
+    font-size: 28px;
+    margin: 0;
+}
+.subtitle {
+    color: #666;
+    margin-bottom: 20px;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #ff4da6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: 0.3s ease;
+}
+.back-btn:hover {
+    background: #e60073;
+    transform: translateY(-1px);
+}
+.section {
+    margin-bottom: 20px;
+}
+.section h3 {
+    color: #333;
+    margin-bottom: 5px;
+}
+.section p {
+    color: #555;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>About the System</h2>
+        <a href="{% url 'landing' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+    <p class="subtitle">Inventory & Sales Tracking System</p>
+    <div class="section">
+        <h3>System Overview</h3>
+        <p>
+            The system is designed to digitize inventory management and sales tracking,
+            replacing manual record keeping with a centralized and efficient solution.
+        </p>
+    </div>
+    <div class="section">
+        <h3>Purpose</h3>
+        <p>
+            To improve accuracy in stock control, reduce human error, and provide
+            real-time visibility of inventory, sales, and item movement within an organization.
+        </p>
+    </div>
+    <div class="section">
+        <h3>Key Features</h3>
+        <p>
+            • Inventory management<br>
+            • Sales tracking<br>
+            • Category & supplier management<br>
+            • Reporting and analytics<br>
+            • User access control
+        </p>
+    </div>
+    <div class="section">
+        <h3>Benefits</h3>
+        <p>
+            • Faster decision making<br>
+            • Reduced stock loss<br>
+            • Improved operational efficiency<br>
+            • Better data accuracy
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

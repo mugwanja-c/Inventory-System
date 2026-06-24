@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Insights</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+body {
+    display:flex;
+    min-height:100vh;
+    background:#fff0f5;
+}
+.sidebar {
+    width:200px;
+    background:#ff66b2;
+    padding:20px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+}
+.logo {
+    font-size:1.8rem;
+    font-weight:bold;
+    margin-bottom:30px;
+    text-align:center;
+}
+.menu {
+    list-style:none;
+    flex:1;
+    margin-top: 20px;
+}
+.menu li {
+    margin-bottom:15px;
+}
+.menu li a {
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    padding:10px;
+    border-radius:8px;
+}
+.menu li a:hover,
+.menu li a.active {
+    background:#ff3399;
+}
+.menu li a i {
+    margin-right:10px;
+    width:15px;
+    text-align:center;
+}
+.main-content {
+    flex:1;
+    padding:30px;
+}
+h1 {
+    margin-bottom:20px;
+    color:#ff3399;
+}
+.filter-buttons {
+    margin-bottom:20px;
+}
+button {
+    padding:8px 12px;
+    border:none;
+    background:#ff3399;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+button:hover {
+    background:#e60073;
+}
+button.active {
+    background:#e60073;
+    border:2px solid white;
+}
+.table-container {
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:30px;
+}
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+thead {
+    background:#ff66b2;
+    color:white;
+}
+th, td {
+    padding:10px;
+    text-align:center;
+}
+
+tbody tr:nth-child(even) {
+    background:#ffe6f0;
+}
+.section-title {
+    margin-bottom:15px;
+    color:#ff3399;
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <h2 class="logo">Inventory & Sales Tracking System</h2>
+
+    <ul class="menu">
+        <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="{% url 'sales_insights' %}" class="active"><i class="fas fa-chart-line"></i> Sales Insights</a></li>
+    </ul>
+</aside>
+
+<main class="main-content">
+
+<h1>Sales Insights</h1>
+
+<a href="{% url 'sales_report_print' %}" target="_blank">
+    <button>Generate Sales Report</button>
+</a>
+
+<br><br>
+
+<div class="filter-buttons">
+    <a href="?filter=day"><button class="{% if filter_type == 'day' %}active{% endif %}">Daily</button></a>
+    <a href="?filter=week"><button class="{% if filter_type == 'week' %}active{% endif %}">Weekly</button></a>
+    <a href="?filter=month"><button class="{% if filter_type == 'month' %}active{% endif %}">Monthly</button></a>
+</div>
+
+<div class="table-container">
+    <h2 class="section-title">Best Selling Products</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in best_selling %}
+            <tr>
+                <td>{{ item.item__name }}</td>
+                <td>{{ item.total_sold }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="2">No data available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container">
+    <h2 class="section-title">Low Performing Products</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in low_performing %}
+            <tr>
+                <td>{{ item.item__name }}</td>
+                <td>{{ item.total_sold }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="2">No data available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container">
+    <h2 class="section-title">Sales Trend Chart ({{ filter_type }})</h2>
+    <canvas id="salesChart"></canvas>
+</div>
+
+</main>
+
+{{ sales_trend|json_script:"sales-data" }}
+
+<script>
+const rawData = JSON.parse(document.getElementById('sales-data').textContent);
+
+
+if (!rawData || rawData.length === 0) {
+    document.getElementById('salesChart').outerHTML =
+        "<p style='text-align:center;color:#ff3399;'>No sales data available</p>";
+} else {
+
+    const labels = rawData.map(item => item.period);
+    const data = rawData.map(item => item.total_sales);
+
+    new Chart(document.getElementById('salesChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Sales Trend',
+                data: data,
+                borderColor: '#ff3399',
+                backgroundColor: 'rgba(255, 51, 153, 0.2)',
+                tension: 0.3,
+                fill: true
+            }]
+        }
+    });
+
+}
+</script>
+
+</body>
+</html>

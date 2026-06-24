@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Orders</title>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+<style>
+* { 
+    margin:0; 
+    padding:0; 
+    box-sizing:border-box; 
+    font-family:'Segoe UI',sans-serif; 
+}
+body { 
+    display:flex;  
+    background:#fff0f5; }
+
+.sidebar { 
+    width:200px; 
+    background:#ff66b2; 
+    padding:20px; 
+    color:white; 
+    display:flex;
+    flex-direction:column;
+}
+
+.logo { 
+    font-size:1.8rem; 
+    font-weight:bold; 
+    margin-bottom:30px; 
+    text-align:center; 
+}
+.menu { 
+    list-style:none; 
+    margin-top:20px; 
+}
+.menu li { 
+    margin-bottom:15px; 
+}
+.menu li a { 
+    text-decoration:none; 
+    color:white; 
+    font-weight:500; 
+    display:flex; 
+    align-items:center; 
+    padding:10px; 
+    border-radius:8px; 
+    transition:0.3s; 
+}
+.menu li a:hover, .menu li a.active { 
+    background:#ff3399; 
+}
+.menu li a i { 
+    margin-right:10px; 
+    width:18px; 
+    text-align:center; 
+}
+
+.logout { 
+    margin-top:auto; 
+}
+.logout a { 
+    display:flex; 
+    align-items:center; 
+    padding:10px; 
+    text-decoration:none; 
+    color:white; 
+    font-weight:500; 
+    border-radius:8px; 
+    transition:0.3s; 
+}
+.logout a:hover { 
+    background:#ff3399; 
+}
+.logout a i { 
+    margin-right:10px; 
+    width:18px; 
+    text-align:center; 
+}
+
+.main-content { 
+    flex:1; 
+    padding:30px; 
+}
+
+h1, .section-title { 
+    color:#ff3399; 
+    margin-bottom:20px; 
+}
+.section-title { 
+    font-size:1.5rem; 
+    margin-bottom:15px; 
+}
+
+.table-container { 
+    overflow-x:auto; 
+    background:white; 
+    padding:15px; 
+    border-radius:12px; 
+    box-shadow:0 5px 15px rgba(0,0,0,0.1); 
+    margin-bottom:40px; 
+}
+
+table { 
+    width:100%; 
+    border-collapse:collapse; 
+}
+thead { 
+    background:#ff66b2; 
+    color:white; 
+}
+th, td { 
+    padding:10px; 
+    text-align:center; 
+}
+tbody tr:nth-child(even) { 
+    background:#ffe6f0; 
+}
+
+.status-pending { 
+    color: #ff9900; 
+    font-weight:bold; 
+}
+.status-delivered { 
+    color: #33cc33; 
+    font-weight:bold; 
+}
+.status-assigned { 
+    color: #ff3333; 
+    font-weight:bold; 
+    }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">Inventory & Sales Tracking System</div>
+    <ul class="menu">
+       <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="{% url 'categories' %}"><i class="fas fa-th-large"></i> Categories</a></li>
+        <li><a href="{% url 'suppliers' %}"><i class="fas fa-truck"></i> Suppliers</a></li>
+        <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
+        <li><a href="{% url 'items' %}"><i class="fas fa-box"></i> Items</a></li>
+        <li><a href="{% url 'orders' %}" class="active"><i class="fa fa-list"></i> All Orders</a></li>
+        <li><a href="{% url 'settings' %}"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="{% url 'change_password' %}"><i class="fas fa-key"></i> Change Password</a></li> 
+    </ul>
+
+    <div class="logout">
+        <a href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i> Logout</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <h1 class="section-title">All Orders</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Item</th>
+                    <th>Supplier</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>{{ order.item }}</td>
+                    <td>{{ order.supplier }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.total_amount }}</td>
+                    <td>
+                        {% if order.status == 'Pending' %}
+                            <span class="status-pending">{{ order.status }}</span>
+                        {% elif order.status == 'Delivered' %}
+                            <span class="status-delivered">{{ order.status }}</span>
+                        {% elif order.status == 'Assigned' %}
+                            <span class="status-assigned">{{ order.status }}</span>
+                        {% else %}
+                            {{ order.status }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No orders yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

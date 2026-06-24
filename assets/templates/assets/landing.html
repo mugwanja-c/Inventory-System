@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory System</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+body {
+    background: #ffe6f0;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.logo {
+    font-size: 40px;
+    font-weight: bold;
+    color: #ff4da6;
+}
+.nav-links a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #ff4da6;
+    font-weight: 500;
+}
+.nav-links a:hover {
+    color: #ffe6f0;
+}
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+.hero-text {
+    max-width: 500px;
+}
+.hero-text h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #222;
+}
+.hero-text p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+.hero-buttons a {
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-right: 10px;
+}
+.btn-primary {
+    background: #ff4da6;
+    color: #fff;
+}
+.btn-primary:hover {
+    background: #e60073;
+}
+.btn-secondary {
+    border: 1px solid #ccc;
+    color: #333;
+}
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+}
+.feature-card {
+    background: #fff;
+    padding: 17px;
+    border-radius: 12px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.feature-card i {
+    font-size: 30px;
+    margin-bottom: 15px;
+    color: #ff4da6;
+}
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="logo">Inventory & Sales Tracking System</div>
+
+    <div class="nav-links">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+</div>
+
+<div class="hero">
+    <div class="hero-text">
+        <h1>Manage Inventory Smartly</h1>
+        <p>Track items, monitor stock levels and manage orders efficiently in one system.</p>
+        
+        <div class="hero-buttons">
+            <a href="{% url 'register' %}" class="btn-primary">Get Started</a>
+        </div>
+    </div>
+
+    <div>
+        <i class="fas fa-boxes" style="font-size:120px; color:#4CAF50;"></i>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <i class="fas fa-box"></i>
+        <h3>Inventory</h3>
+        <p>Manage and organize your items. </p>
+    </div>
+
+    <div class="feature-card">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Orders</h3>
+        <p>Track all sales and transactions easily.</p>
+    </div>
+
+    <div class="feature-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Reports</h3>
+        <p>Monitor stock and performance insights.</p>
+    </div>
+</div>
+
+<div class="footer">
+    <span>&copy; Inventory & Sales Tracking System 2026</span>
+</div>
+
+</body>
+</html>

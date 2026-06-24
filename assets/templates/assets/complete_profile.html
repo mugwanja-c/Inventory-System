@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Profile</title>
+<style>
+body { 
+    font-family: Arial, sans-serif; 
+    background:#fff0f5; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    height:100vh; 
+}
+.form-container { 
+    background:white; 
+    padding:30px; 
+    border-radius:12px; 
+    box-shadow:0 5px 15px rgba(0,0,0,0.1); 
+    width:350px; 
+}
+input, button { 
+    width:100%; 
+    padding:10px; 
+    margin:10px 0; 
+    border-radius:6px; 
+    border:1px solid #ccc; 
+}
+button { 
+    background:#ff3399; 
+    color:white; 
+    border:none; 
+    cursor:pointer; 
+}
+button:hover { 
+    background:#e60073;
+}
+</style>
+</head>
+<body>
+<div class="form-container">
+<h2>Complete Your Profile</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="first_name" placeholder="First Name" required>
+    <input type="text" name="last_name" placeholder="Last Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Save & Continue</button>
+</form>
+</div>
+</body>
+</html>

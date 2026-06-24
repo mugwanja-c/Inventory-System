@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Location</title>
+
+<style>
+body { 
+font-family:'Segoe UI'; 
+background:#fff0f5; 
+padding:30px; 
+}
+
+.container {
+    background:white;
+    padding:25px;
+    max-width:500px;
+    margin:auto;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h2 { color:#ff3399; }
+
+select, input, textarea {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+button {
+    background:#ff3399;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+}
+
+button:hover { background:#e60073; }
+
+a { margin-left:10px; text-decoration:none; color:#555; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Edit Location</h2>
+    {% if error %}
+    <p style="color:red; font-weight:bold;">
+        {{ error }}
+    </p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <select name="county">
+            {% for county in counties %}
+                <option value="{{ county.id }}"
+                    {% if location.county.id == county.id %}selected{% endif %}>
+                    {{ county.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="branch_name" value="{{ location.branch_name }}">
+
+        <button type="submit">Update</button>
+        <a href="{% url 'locations' %}">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login | Asset System</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body {
+font-family: Arial, sans-serif;
+background: #ffe6f0; 
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+.login-container {
+background: #fff;
+padding: 40px;
+border-radius: 15px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+width: 350px;
+}
+.login-container h2 {
+text-align: center;
+color: #ff4da6;
+margin-bottom: 25px;
+}
+.login-container form {
+display: flex;
+flex-direction: column;
+}
+.login-container input {
+padding: 12px;
+margin: 8px 0;
+border-radius: 8px;
+border: 1px solid #ccc;
+font-size: 16px;
+}
+.login-container button {
+padding: 12px;
+margin-top: 15px;
+border: none;
+border-radius: 8px;
+background: #ff4da6;
+color: white;
+font-size: 16px;
+cursor: pointer;
+transition: 0.3s;
+}
+.login-container button:hover {
+background: #e60073;
+}
+.error {
+color: red;
+font-size: 14px;
+margin-top: 5px;
+text-align: center;
+}
+.fa-user, .fa-lock {
+margin-right: 8px;
+}
+.input-group {
+display: flex;
+align-items: center;
+border: 1px solid #ccc;
+border-radius: 8px;
+padding: 5px 10px;
+margin: 8px 0;
+}
+.input-group input {
+border: none;
+outline: none;
+flex: 1;
+font-size: 16px;
+}
+</style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Log in</h2>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <i class="fas fa-eye" id="togglePassword" style="cursor:pointer;"></i>
+        </div>
+            <button type="submit">Login</button>
+
+        <div style="margin: 10px 0; text-align: left;">
+         <label style="font-size: 14px;">
+        <input type="checkbox" name="remember_me">
+        Remember Me
+         </label>
+        </div>
+        
+        </form>
+    </div>
+</body>
+<script>
+const togglePassword = document.getElementById("togglePassword");
+const password = document.getElementById("password");
+
+togglePassword.addEventListener("click", function () {
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+});
+</script>
+</html>

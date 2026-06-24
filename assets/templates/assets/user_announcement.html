@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#ffe6f0;
+}
+
+.sidebar {
+  width:200px;
+  height:100vh;
+  background:#ff66b2;
+  position:fixed;
+  padding-top:20px;
+  overflow-y:auto;
+}
+.sidebar h2 {
+  text-align:center;
+  color:white;
+}
+.sidebar a {
+  display:block;
+  color:white;
+  padding:12px 20px;
+  text-decoration:none;
+  margin:5px 10px;
+  border-radius:8px;
+}
+.sidebar a:hover {
+  background:#e60073;
+}
+.sidebar a.active { 
+    background:#ff3399; 
+}
+.main {
+  margin-left:240px;
+  padding:30px;
+}
+.topbar h2 {
+  color:#e60073;
+}
+
+.card {
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+.announcement-title {
+  font-size:18px;
+  font-weight:bold;
+  color:#e60073;
+}
+.announcement-date {
+  font-size:12px;
+  color:gray;
+  margin:5px 0 10px;
+}
+.announcement-message {
+  color:#333;
+  line-height:1.5;
+}
+
+.empty {
+  text-align:center;
+  color:gray;
+  margin-top:50px;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Customer Panel</h2>
+<a href="{% url 'user_dashboard' %}"><i class="fa-solid fa-house"></i> Dashboard</a>
+<a href="{% url 'user_announcement' %}" class="active"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+<a href="{% url 'accounts:profile' %}"><i class="fa-solid fa-user"></i> My Profile</a>
+<a href="{% url 'accounts:change_password' %}"><i class="fa-solid fa-key"></i> Change Password</a>
+<a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+
+<div class="main">
+<div class="topbar">
+  <h2>Announcements</h2>
+</div>
+
+{% for ann in announcement %}
+  <div class="card">
+    <div class="announcement-title">{{ ann.title }}</div>
+    <div class="announcement-date">{{ ann.created_at|date:"Y-m-d H:i" }}</div>
+    <div class="announcement-message">{{ ann.message }}</div>
+  </div>
+{% empty %}
+  <div class="card">
+    <div class="empty">No announcements available</div>
+  </div>
+{% endfor %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Send Announcement</title>
+<style>
+        
+body {
+font-family: Arial, sans-serif;
+background: #fff0f5;
+color: #333;
+margin: 0;
+padding: 20px;
+}
+
+.container {
+max-width: 600px;
+margin: 0 auto;
+}
+
+h1 {
+font-size: 28px;
+margin-bottom: 5px;
+}
+
+p {
+margin-bottom: 20px;
+}
+
+form {
+background: #ffe6f2;
+padding: 15px;
+border-radius: 8px;
+}
+
+.form-group {
+margin-bottom: 15px;
+}
+
+label {
+display: block;
+margin-bottom: 5px;
+}
+
+input[type="text"], textarea {
+width: 100%;
+padding: 8px;
+border-radius: 4px;
+border: 1px solid #ff99cc;
+box-sizing: border-box;
+}
+
+textarea {
+resize: vertical;
+}
+
+.btn-send {
+background: #ff4da6;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.btn-send:hover {
+background: #ff1a75;
+}
+
+.footer-note {
+font-size: 13px;
+color: #ff66a3;
+margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Send Announcement</h1>
+    <p>Broadcast a message to all users of the system.</p>
+
+    <form method="POST" action="{% url 'send_announcement' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Announcement Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter title" required>
+        </div>
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+        </div>
+        <button type="submit" class="btn-send">Send Announcement</button>
+    </form>
+
+    <p class="footer-note">The announcement will be visible to all users immediately after sending.</p>
+</div>
+</body>
+</html>
